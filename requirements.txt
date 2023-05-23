@@ -15,7 +15,7 @@ Jinja2==3.1.2
 MarkupSafe==2.1.2
 pycparser==2.21
 PySocks==1.7.1
-requests==2.28.2
+requests==2.31.0
 requests-file==1.5.1
 six==1.16.0
 tldextract==3.4.0
