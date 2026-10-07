@@ -1,0 +1,30 @@
+# Keeps Dependabot pull requests moving: merges them once checks pass and
+# gets the failing ones fixed. The logic lives in danieltyukov/dependabot-autopilot.
+name: dependabot-autopilot
+
+on:
+  pull_request:
+    types: [opened, synchronize, reopened]
+  schedule:
+    - cron: "17 6 * * 1"
+  workflow_dispatch:
+
+permissions:
+  contents: write
+  pull-requests: write
+  issues: write
+  checks: read
+  statuses: read
+  actions: write
+  pages: write
+  id-token: write
+
+concurrency:
+  group: dependabot-autopilot-${{ github.event.pull_request.number || github.run_id }}
+  cancel-in-progress: true
+
+jobs:
+  autopilot:
+    if: github.event_name != 'pull_request' || github.event.pull_request.user.login == 'dependabot[bot]'
+    uses: danieltyukov/dependabot-autopilot/.github/workflows/autopilot.yml@main
+    secrets: inherit
