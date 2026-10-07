@@ -1,5 +1,5 @@
-# Keeps Dependabot pull requests moving: merges them once checks pass and
-# gets the failing ones fixed. The logic lives in danieltyukov/dependabot-autopilot.
+# Keeps Dependabot pull requests moving: merges them once checks pass and labels the
+# ones that fail. The logic lives in danieltyukov/dependabot-autopilot.
 name: dependabot-autopilot
 
 on:
@@ -9,7 +9,7 @@ on:
     - cron: "17 6 * * 1"
   workflow_dispatch:
 
-# The most any autopilot job gets; each job narrows it. No id-token.
+# The most any autopilot job gets; each job narrows it. No id-token, no secrets.
 permissions:
   contents: write
   pull-requests: write
@@ -26,7 +26,5 @@ concurrency:
 jobs:
   autopilot:
     if: github.event_name != 'pull_request' || github.event.pull_request.user.login == 'dependabot[bot]'
+    # No secrets are passed on.
     uses: danieltyukov/dependabot-autopilot/.github/workflows/autopilot.yml@main
-    # Only the Claude token is passed on, never the rest of the repository's secrets.
-    secrets:
-      CLAUDE_CODE_OAUTH_TOKEN: ${{ secrets.CLAUDE_CODE_OAUTH_TOKEN }}
